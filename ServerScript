@@ -1,0 +1,27 @@
+-- ServerScript no ServerScriptService
+print("Iniciando transferência para ReplicatedFirst...")
+
+local ServerScriptService = game:GetService("ServerScriptService")
+local ServerStorage = game:GetService("ServerStorage")
+local ReplicatedFirst = game:GetService("ReplicatedFirst")
+
+-- Função para mover todos os filhos de um serviço
+local function moveChildren(fromService, toService, serviceName)
+    local children = fromService:GetChildren()
+    
+    for _, child in ipairs(children) do
+        -- Não mover o próprio script que está executando
+        if child ~= script then
+            print("Movendo: " .. child.Name .. " de " .. serviceName)
+            child.Parent = toService
+        end
+    end
+end
+
+-- Mover do ServerScriptService
+moveChildren(ServerScriptService, ReplicatedFirst, "ServerScriptService")
+
+-- Mover do ServerStorage
+moveChildren(ServerStorage, ReplicatedFirst, "ServerStorage")
+
+print("Transferência para ReplicatedFirst concluída!")
