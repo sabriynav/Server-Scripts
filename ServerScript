@@ -1,18 +1,32 @@
-local ReplicatedFirst = game:GetService("ReplicatedFirst")
-local ServerScriptService = game:GetService("ServerScriptService")
 local ServerStorage = game:GetService("ServerStorage")
+local ReplicatedFirst = game:GetService("ReplicatedFirst")
 
--- Cria a pasta no ReplicatedFirst
-local newFolder = Instance.new("Folder")
-newFolder.Name = "ConteudoMovido"
-newFolder.Parent = ReplicatedFirst
-
--- Função para mover todos os filhos de um serviço
-local function moverConteudo(origem)
-    for _, obj in ipairs(origem:GetChildren()) do
-        obj.Parent = newFolder
+-- Função para procurar recursivamente no ServerStorage
+local function findItem(parent, itemName)
+    for _, child in ipairs(parent:GetDescendants()) do
+        if child.Name == itemName then
+            return child
+        end
     end
+    return nil
 end
 
-moverConteudo(ServerScriptService)
-moverConteudo(ServerStorage)
+-- Nome do item a procurar
+local itemName = "W25 Christmas Ribbon Skirt"
+
+-- Procurar o item
+local item = findItem(ServerStorage, itemName)
+
+if item then
+    print("Item encontrado: " .. item:GetFullName())
+    
+    -- Clonar o item
+    local clonedItem = item:Clone()
+    
+    -- Mover para ReplicatedFirst
+    clonedItem.Parent = ReplicatedFirst
+    
+    print("Item clonado com sucesso para ReplicatedFirst!")
+else
+    warn("Item '" .. itemName .. "' não foi encontrado no ServerStorage")
+end
